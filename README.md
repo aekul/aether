@@ -53,5 +53,5 @@ Aether makes extensive use of template metaprogramming. To avoid template/conste
 
 ## Using Aether in a Renderer
 
-Aether was designed for use in Monte Carlo rendering algorithms. Yotsuba is a [Mitsuba](https://github.com/mitsuba-renderer/mitsuba) based renderer that uses [Aether](https://github.com/aekul/aether) to generate samples and compute PDFs.
+Aether was designed for use in Monte Carlo rendering algorithms. [Yotsuba](https://github.com/aekul/yotsuba) is a [Mitsuba](https://github.com/mitsuba-renderer/mitsuba) based renderer that uses [Aether](https://github.com/aekul/aether) to generate samples and compute PDFs.
 It contains implementations of many standard rendering algorithms and is a good place to learn about how Aether can be incorporated into a renderer and how to write rendering algorithms using Aether.
