@@ -9,7 +9,7 @@ template <typename T>
 constexpr T epsilon = T(0.000001);
 
 template <typename T>
-constexpr T pi = T(M_PI);
+constexpr T pi = T(EIGEN_PI);
 
 template <typename T>
 constexpr T one_over_pi = T(1) / pi<T>;
