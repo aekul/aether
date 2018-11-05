@@ -23,13 +23,13 @@ using namespace Eigen;
 template <typename T>
 using result_t = typename std::conditional<
   dimensions_of(T{}).IsScalar()
-  , Real 
+  , Real
   , typename std::conditional<
     is_vector(T{})
     , typename std::conditional<
       dimensions_of(T{}).Rows() == 2
       , Vector2
-      , Vector3 
+      , Vector3
     >::type
     , typename std::conditional<
       dimensions_of(T{}).Cols() == 3
@@ -37,14 +37,14 @@ using result_t = typename std::conditional<
       , Matrix3x2
     >::type
   >::type
->::type; 
+>::type;
 
 //inline std::ostream& operator<<(std::ostream& out, const Vector3& v) {
   //return out << "[" << v[0] << ", " << v[1] << ", " << v[2] << "]";
 //}
 
 template <int Rows, int Cols>
-inline Real det(const Matrix<Real, Rows, Cols>& m) {
+inline Real det(const Eigen::Matrix<Real, Rows, Cols>& m) {
   //std::cerr << m << std::endl;
   return std::sqrt((m.transpose() * m).determinant());
 }
@@ -94,8 +94,8 @@ inline Real clamp(const Real& a) {
 }
 
 template <int A, int B>
-inline Matrix<Real, A + B, 1> concatenate_vectors(const Matrix<Real, A, 1>& a, const Matrix<Real, B, 1>& b) {
-  Matrix<Real, A + B, 1> result;
+inline Eigen::Matrix<Real, A + B, 1> concatenate_vectors(const Eigen::Matrix<Real, A, 1>& a, const Eigen::Matrix<Real, B, 1>& b) {
+  Eigen::Matrix<Real, A + B, 1> result;
   result << a, b;
   return result;
 }
@@ -130,7 +130,7 @@ inline result_t<literal<N, D>> eval_eigen(literal<N, D>, const Vars&) {
   return Real(N) / Real(D);
 }
 
-  
+
 template <typename... Ts, typename Vars>
 inline result_t<productexpr<Ts...>> eval_eigen(productexpr<Ts...>, const Vars& vars) {
   return result_t<productexpr<Ts...>>((... * eval_eigen(Ts{}, vars)));
@@ -213,7 +213,7 @@ template <typename C, typename... Vs, typename... Ts, typename Vars, EnableIf<(i
 inline auto eval_eigen(matrixexpr<vectorexpr<C, Vs...>, Ts...>, const Vars& vars) {
   constexpr auto num_rows = dimensions_of(vectorexpr<C, Vs...>{}).Rows() * dimensions_of(at<0>(vectorexpr<C, Vs...>{})).Rows();
 
-  Matrix<Real, num_rows, 1 + sizeof...(Ts)> result;
+  Eigen::Matrix<Real, num_rows, 1 + sizeof...(Ts)> result;
 
   eval_eigen_unpack_matrix(
     result
@@ -507,7 +507,7 @@ inline result_conditional_t<T> eval_eigen_conditional(baseexpr<T>, const Vars& v
 
 template <typename C, typename V, typename Vars>
 inline result_conditional_t<branchcaseexpr<C, V>> eval_eigen_conditional(branchcaseexpr<C, V>, const Vars& vars) {
-  auto cond = eval_eigen(C{}, vars); 
+  auto cond = eval_eigen(C{}, vars);
   if (!cond) {
     return result_conditional_t<branchcaseexpr<C, V>>{};
   }
