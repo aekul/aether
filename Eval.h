@@ -329,6 +329,11 @@ constexpr auto det(vectorexpr<C, Ts...>) {
   return abs(rcp(sqrt(AA * BB - AB * AB)));
 }
 
+template <typename C, typename... Ts, EnableIf<(sizeof...(Ts) < vars(vectorexpr<C, Ts...>{}).Size())> = 0>
+constexpr auto det(vectorexpr<C, Ts...>) {
+  return zero;
+}
+
 template <typename C, typename V, EnableIf<is_constant(C{}) && is_vector(V{})> = 0>
 constexpr auto det(productexpr<C, V>) {
   return det(C{}) * det(V{});
@@ -347,6 +352,11 @@ constexpr auto det(indicatorexpr<T>) {
 template <typename T, EnableIf<is_constant(T{})> = 0>
 constexpr auto det(baseexpr<T>) {
   return one;
+}
+
+template <typename T, EnableIf<is_scalarexpr(T{}) && (vars(T{}).Size() > 1)> = 0>
+constexpr auto det(baseexpr<T>) {
+  return zero;
 }
 
 template <typename T, EnableIf<is_scalarexpr(T{}) && (vars(T{}).Size() == 1)> = 0>
